@@ -67,7 +67,7 @@ def analyze_chat(text: str, user_name: Optional[str] = None, api_key: Optional[s
 
 
 def _analyze_with_gemini(text: str, user_name: Optional[str], api_key: str) -> ChatAnalysisResult:
-    """Invokes Google Gemini model using the official google.genai SDK."""
+    """Invokes Google Gemini model using the official google.genai SDK with model fallback."""
     from google import genai
     from google.genai import types
 
@@ -93,19 +93,38 @@ Extract:
 8. direct_mentions (list of objects with: sender, message, relevance, priority)
 9. uncertainties (list of objects with: topic, missing_info)
 
-Return strictly raw JSON with no Markdown backticks or markdown fences."""
+Return strictly valid JSON adhering to this schema."""
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_INSTRUCTION,
-            temperature=0.2,
-            response_mime_type="application/json",
-        ),
-    )
+    models_to_try = [
+        "gemini-flash-lite-latest",
+        "gemini-flash-latest",
+        "gemini-3.8-flash",
+    ]
 
-    raw_json_str = response.text.strip()
+    last_error = None
+    raw_json_str = None
+
+    for model_name in models_to_try:
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_INSTRUCTION,
+                    temperature=0.2,
+                    response_mime_type="application/json",
+                ),
+            )
+            raw_json_str = response.text.strip()
+            if raw_json_str:
+                logger.info(f"Successfully generated analysis using model '{model_name}'")
+                break
+        except Exception as err:
+            logger.warning(f"Model '{model_name}' encountered error ({err}). Trying next model...")
+            last_error = err
+
+    if not raw_json_str:
+        raise RuntimeError(f"All Gemini models failed. Last error: {last_error}")
     # Strip markdown if present
     if raw_json_str.startswith("```"):
         raw_json_str = re.sub(r"^```(?:json)?\n", "", raw_json_str)
