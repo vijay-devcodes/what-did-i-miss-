@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Did I Miss? — AI-Powered Group Chat Summarizer</title>
+  <meta name="description" content="Catch up without scrolling forever. Turn overwhelming group chats into clear action items, deadlines, decisions, and priority announcements.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              950: '#070B14',
+              900: '#0B1120',
+              850: '#0F172A',
+              800: '#1E293B',
+              700: '#334155'
+            },
+            electric: {
+              400: '#38BDF8',
+              500: '#0EA5E9',
+              600: '#0284C7'
+            },
+            accent: {
+              400: '#C084FC',
+              500: '#A855F7',
+              600: '#9333EA'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Custom stylesheet -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-navy-950 text-slate-100 min-h-screen flex flex-col bg-mesh-gradient selection:bg-purple-600 selection:text-white">
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-navy-950/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-sky-400 p-[1.5px] flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <div class="w-full h-full bg-navy-950 rounded-[10px] flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-5 h-5 text-electric-400"></i>
+          </div>
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-electric-400 bg-clip-text text-transparent">
+            What Did I Miss?
+          </span>
+          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[11px] font-medium tracking-wide uppercase bg-purple-500/10 text-purple-400 rounded-full border border-purple-500/20">
+            Hackathon Edition
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- AI Engine Status Pill -->
+        <div id="engine-status-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-900 border border-slate-800 text-slate-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="engine-status-text">Engine: Initializing...</span>
+        </div>
+
+        <!-- Privacy Quick Button -->
+        <button id="open-privacy-modal-btn" class="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition" title="Privacy & Security Assurance">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Settings Modal Button -->
+        <button id="open-settings-modal-btn" class="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition" title="API Key Settings">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+    <!-- Hero / Landing Section -->
+    <section class="text-center py-6 sm:py-10 max-w-3xl mx-auto space-y-5">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-500/10 to-sky-500/10 border border-purple-500/20 text-purple-300">
+        <i data-lucide="zap" class="w-3.5 h-3.5 text-electric-400"></i>
+        <span>Stop drowning in 500+ unread group messages</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+        Catch up without <span class="bg-gradient-to-r from-electric-400 via-indigo-400 to-accent-400 bg-clip-text text-transparent">scrolling forever.</span>
+      </h1>
+
+      <p class="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto">
+        Extract instant executive summaries, urgent deadlines, tasks with assignees, scheduled meetings, and messages mentioning you — with zero hallucinations.
+      </p>
+
+      <!-- Quick Feature Badges -->
+      <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-navy-900/80 border border-slate-800 px-3 py-1.5 rounded-lg">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Strict Truth-in-AI</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-navy-900/80 border border-slate-800 px-3 py-1.5 rounded-lg">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>Urgent Deadlines</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-navy-900/80 border border-slate-800 px-3 py-1.5 rounded-lg">
+          <i data-lucide="at-sign" class="w-3.5 h-3.5 text-electric-400"></i>
+          <span>Direct Mentions</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-slate-400 bg-navy-900/80 border border-slate-800 px-3 py-1.5 rounded-lg">
+          <i data-lucide="lock" class="w-3.5 h-3.5 text-purple-400"></i>
+          <span>In-Memory Privacy</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive App Workspace -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- LEFT COLUMN: Input & Configuration Panel (lg:col-span-5) -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-panel rounded-2xl p-6 shadow-xl border border-slate-800 space-y-5">
+          
+          <!-- Section Title & Demo Loaders -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-semibold text-white flex items-center gap-2">
+                <i data-lucide="message-square" class="w-4 h-4 text-electric-400"></i>
+                Import Conversation
+              </h2>
+              <span class="text-xs text-slate-400" id="char-counter">0 chars</span>
+            </div>
+
+            <!-- Demo Quick Picker for Judges -->
+            <div class="space-y-1.5">
+              <label class="text-xs font-medium text-slate-400 flex items-center gap-1">
+                <span>Try Demo Chats (1-Click Test):</span>
+              </label>
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" data-demo="hackathon_crunch" class="demo-btn text-left p-2 rounded-lg bg-navy-900 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800/80 text-xs text-slate-300 transition group">
+                  <div class="font-medium text-purple-300 group-hover:text-purple-200">⚡ Hackathon</div>
+                  <div class="text-[10px] text-slate-500 truncate">Crunch sprint</div>
+                </button>
+                <button type="button" data-demo="capstone_project" class="demo-btn text-left p-2 rounded-lg bg-navy-900 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800/80 text-xs text-slate-300 transition group">
+                  <div class="font-medium text-sky-300 group-hover:text-sky-200">🎓 Capstone</div>
+                  <div class="text-[10px] text-slate-500 truncate">Senior team</div>
+                </button>
+                <button type="button" data-demo="campus_event" class="demo-btn text-left p-2 rounded-lg bg-navy-900 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800/80 text-xs text-slate-300 transition group">
+                  <div class="font-medium text-emerald-300 group-hover:text-emerald-200">🎪 TechFest</div>
+                  <div class="text-[10px] text-slate-500 truncate">Club event</div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Target User Mention Name Input -->
+          <div class="space-y-1.5">
+            <label for="user-name-input" class="text-xs font-medium text-slate-300 flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="user" class="w-3.5 h-3.5 text-indigo-400"></i>
+                Your Name / Handle (Optional)
+              </span>
+              <span class="text-[11px] text-slate-500">e.g., Alex, Priya, Marcus</span>
+            </label>
+            <input 
+              type="text" 
+              id="user-name-input" 
+              placeholder="e.g. Alex" 
+              class="w-full px-3.5 py-2.5 bg-navy-900/90 border border-slate-800 rounded-xl text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"
+            >
+          </div>
+
+          <!-- Input Mode Tabs: Paste vs File Upload -->
+          <div class="space-y-3">
+            <div class="flex items-center p-1 bg-navy-900 rounded-xl border border-slate-800">
+              <button id="tab-paste" class="flex-1 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-white shadow-sm transition">
+                Paste Text
+              </button>
+              <button id="tab-upload" class="flex-1 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-slate-200 transition">
+                Upload File (.txt, .log)
+              </button>
+            </div>
+
+            <!-- Paste Container -->
+            <div id="paste-container" class="space-y-2">
+              <textarea 
+                id="chat-textarea" 
+                rows="11" 
+                placeholder="Paste group chat messages here (WhatsApp, Slack, Discord, Microsoft Teams, or plain text)...&#10;&#10;Example:&#10;[10:15 AM] Liam: Devpost deadline is Sunday 11am!&#10;[10:18 AM] Priya: I will finish the dashboard UI.&#10;[10:20 AM] Alex: Sync meeting at 4:00 PM on Zoom."
+                class="w-full px-3.5 py-3 bg-navy-900/90 border border-slate-800 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition resize-y font-mono leading-relaxed"
+              ></textarea>
+              <div class="flex items-center justify-between text-[11px] text-slate-500">
+                <span>Supports Slack, WhatsApp, Discord, Teams format</span>
+                <button id="clear-input-btn" class="hover:text-slate-300 text-slate-500 transition">Clear text</button>
+              </div>
+            </div>
+
+            <!-- File Upload Container -->
+            <div id="upload-container" class="hidden space-y-3">
+              <div id="drop-zone" class="border-2 border-dashed border-slate-800 hover:border-indigo-500/60 rounded-xl p-8 text-center transition cursor-pointer bg-navy-900/40">
+                <input type="file" id="file-input" class="hidden" accept=".txt,.chat,.log,.csv,.json,.md">
+                <i data-lucide="upload-cloud" class="w-10 h-10 text-indigo-400 mx-auto mb-2"></i>
+                <p class="text-sm font-medium text-slate-300">Click to upload or drag & drop</p>
+                <p class="text-xs text-slate-500 mt-1">.txt, .chat, .log, .csv, .md (Max 2MB)</p>
+                <p id="file-chosen-name" class="text-xs text-emerald-400 mt-3 hidden font-mono"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Analyze Action Button -->
+          <button 
+            id="analyze-btn" 
+            class="w-full btn-gradient py-3.5 px-6 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2 group cursor-pointer"
+          >
+            <i data-lucide="sparkles" class="w-4 h-4 group-hover:rotate-12 transition transform"></i>
+            <span>Extract What I Missed</span>
+          </button>
+
+          <!-- Privacy footer badge in card -->
+          <div class="flex items-center justify-center gap-2 text-[11px] text-slate-500 pt-1">
+            <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-500"></i>
+            <span>Processed strictly in-memory. Never stored or logged.</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Output Dashboard (lg:col-span-7) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Initial Empty State -->
+        <div id="empty-state" class="glass-panel rounded-2xl p-12 text-center border border-slate-800 space-y-4">
+          <div class="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-electric-400 flex items-center justify-center mx-auto shadow-inner">
+            <i data-lucide="inbox" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">No Conversation Analyzed Yet</h3>
+          <p class="text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
+            Paste a chat history on the left, or click one of the <strong class="text-slate-200">⚡ Demo Chats</strong> above to see instant AI extraction in action!
+          </p>
+          <button id="try-demo-empty-btn" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 hover:bg-indigo-600/50 transition">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+            Load Hackathon Demo Chat
+          </button>
+        </div>
+
+        <!-- Loading State (hidden initially) -->
+        <div id="loading-state" class="hidden glass-panel rounded-2xl p-10 border border-indigo-500/30 text-center space-y-6">
+          <div class="relative w-16 h-16 mx-auto">
+            <div class="absolute inset-0 rounded-full border-4 border-slate-800"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-electric-400 border-t-transparent animate-spin"></div>
+            <div class="absolute inset-2 rounded-full bg-navy-950 flex items-center justify-center">
+              <i data-lucide="cpu" class="w-6 h-6 text-purple-400 animate-pulse"></i>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <h4 class="text-base font-semibold text-white">Analyzing Conversation Streams</h4>
+            <p id="loading-step-text" class="text-xs text-electric-400 font-mono">Parsing timestamps and sender identities...</p>
+          </div>
+          <div class="max-w-xs mx-auto bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-800">
+            <div id="loading-progress-bar" class="h-full bg-gradient-to-r from-purple-500 to-electric-400 w-1/4 transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <!-- Results Container (hidden initially) -->
+        <div id="results-container" class="hidden space-y-6">
+
+          <!-- Key Metrics Banner -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="glass-panel p-3.5 rounded-xl border border-slate-800 text-center">
+              <div class="text-[11px] text-slate-400 uppercase font-medium">Messages</div>
+              <div id="stat-messages" class="text-xl font-bold text-white mt-0.5">0</div>
+            </div>
+            <div class="glass-panel p-3.5 rounded-xl border border-slate-800 text-center">
+              <div class="text-[11px] text-slate-400 uppercase font-medium">Action Items</div>
+              <div id="stat-tasks" class="text-xl font-bold text-emerald-400 mt-0.5">0</div>
+            </div>
+            <div class="glass-panel p-3.5 rounded-xl border border-slate-800 text-center">
+              <div class="text-[11px] text-slate-400 uppercase font-medium">Deadlines</div>
+              <div id="stat-deadlines" class="text-xl font-bold text-amber-400 mt-0.5">0</div>
+            </div>
+            <div class="glass-panel p-3.5 rounded-xl border border-slate-800 text-center">
+              <div class="text-[11px] text-slate-400 uppercase font-medium">Your Mentions</div>
+              <div id="stat-mentions" class="text-xl font-bold text-electric-400 mt-0.5">0</div>
+            </div>
+          </div>
+
+          <!-- Executive Summary Card -->
+          <div class="glass-panel rounded-2xl p-6 border border-slate-800 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+              <div class="flex items-center gap-2">
+                <i data-lucide="file-text" class="w-4 h-4 text-purple-400"></i>
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider">Executive Overview</h3>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="sentiment-badge" class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                  Focused
+                </span>
+                <span id="analysis-mode-badge" class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-sky-500/10 text-sky-300 border border-sky-500/20 font-mono">
+                  Engine: Offline
+                </span>
+              </div>
+            </div>
+
+            <p id="overall-summary-text" class="text-slate-200 text-sm leading-relaxed">
+              Summary text will appear here.
+            </p>
+
+            <!-- Export / Copy Toolbar -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/60 text-xs">
+              <div class="text-slate-400 text-[11px]">
+                <i data-lucide="check" class="w-3 h-3 text-emerald-400 inline mr-1"></i>
+                Verified without hallucinations
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="copy-summary-btn" class="px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span>Copy Briefing</span>
+                </button>
+                <button id="download-txt-btn" class="px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+                  <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                  <span>Download .txt</span>
+                </button>
+                <button id="download-json-btn" class="px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white transition flex items-center gap-1.5">
+                  <i data-lucide="code" class="w-3.5 h-3.5"></i>
+                  <span>JSON</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="space-y-3">
+            <div class="flex flex-col sm:flex-row gap-2">
+              <!-- Search box -->
+              <div class="relative flex-1">
+                <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-3"></i>
+                <input 
+                  type="text" 
+                  id="search-filter-input" 
+                  placeholder="Filter by keyword (e.g., Alex, Devpost, Zoom, DB)..." 
+                  class="w-full pl-9 pr-3.5 py-2 bg-navy-900 border border-slate-800 rounded-xl text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition"
+                >
+              </div>
+
+              <!-- Priority Dropdown Filter -->
+              <select id="priority-select-filter" class="px-3 py-2 bg-navy-900 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-indigo-500 cursor-pointer">
+                <option value="all">All Priorities</option>
+                <option value="High">🔴 High Urgency Only</option>
+                <option value="Medium">🟡 Medium Urgency</option>
+                <option value="Low">🟢 Low Urgency</option>
+              </select>
+            </div>
+
+            <!-- Category Pills Filter Bar -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar" id="category-pills">
+              <button data-cat="all" class="cat-pill px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium whitespace-nowrap transition">
+                All (<span id="count-all">0</span>)
+              </button>
+              <button data-cat="announcements" class="cat-pill px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 text-slate-400 hover:text-slate-200 whitespace-nowrap transition">
+                🔥 Announcements (<span id="count-announcements">0</span>)
+              </button>
+              <button data-cat="tasks" class="cat-pill px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 text-slate-400 hover:text-slate-200 whitespace-nowrap transition">
+                ✅ Action Items (<span id="count-tasks">0</span>)
+              </button>
+              <button data-cat="deadlines" class="cat-pill px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 text-slate-400 hover:text-slate-200 whitespace-nowrap transition">
+                ⏰ Deadlines (<span id="count-deadlines">0</span>)
+              </button>
+              <button data-cat="meetings" class="cat-pill px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 text-slate-400 hover:text-slate-200 whitespace-nowrap transition">
+                📅 Meetings (<span id="count-meetings">0</span>)
+              </button>
+              <button data-cat="decisions" class="cat-pill px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 text-slate-400 hover:text-slate-200 whitespace-nowrap transition">
+                ⚖️ Decisions (<span id="count-decisions">0</span>)
+              </button>
+              <button data-cat="mentions" class="cat-pill px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 text-slate-400 hover:text-slate-200 whitespace-nowrap transition">
+                🎯 Mentions (<span id="count-mentions">0</span>)
+              </button>
+              <button data-cat="uncertainties" class="cat-pill px-3 py-1.5 rounded-lg bg-navy-900 border border-slate-800 text-slate-400 hover:text-slate-200 whitespace-nowrap transition">
+                ❓ Missing Info (<span id="count-uncertainties">0</span>)
+              </button>
+            </div>
+          </div>
+
+          <!-- Cards Dynamic Feed Container -->
+          <div id="cards-feed" class="space-y-4">
+            <!-- Dynamically populated via app.js -->
+          </div>
+
+          <!-- Empty Search Match State -->
+          <div id="filter-empty-state" class="hidden p-8 text-center glass-panel rounded-xl border border-slate-800 text-slate-400 text-xs">
+            No items matched your current search or priority filter. Try selecting "All".
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Privacy & Security Modal -->
+  <div id="privacy-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel-glow max-w-lg w-full rounded-2xl p-6 border border-slate-800 space-y-4 text-slate-300">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+          Privacy & Security Policy
+        </h3>
+        <button id="close-privacy-modal-btn" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="text-xs space-y-3 leading-relaxed">
+        <div class="p-3 rounded-lg bg-navy-900 border border-slate-800">
+          <strong class="text-white block mb-1">1. Ephemeral In-Memory Processing:</strong>
+          Conversations are processed strictly in RAM and never written to permanent disk storage or persistent databases.
+        </div>
+        <div class="p-3 rounded-lg bg-navy-900 border border-slate-800">
+          <strong class="text-white block mb-1">2. No Chat Logging:</strong>
+          Our server does not write raw conversation text or sensitive tokens into server log files.
+        </div>
+        <div class="p-3 rounded-lg bg-navy-900 border border-slate-800">
+          <strong class="text-white block mb-1">3. File Upload Safety:</strong>
+          Uploaded chat files are parsed in memory, checked against size limits (2MB), and never executed.
+        </div>
+        <div class="p-3 rounded-lg bg-navy-900 border border-slate-800">
+          <strong class="text-white block mb-1">4. Zero External Model Training:</strong>
+          Your chat messages are not used to train machine learning models.
+        </div>
+      </div>
+      <div class="pt-2 text-right">
+        <button id="confirm-privacy-modal-btn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-medium transition">
+          I Understand
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal (Gemini API Key) -->
+  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel-glow max-w-md w-full rounded-2xl p-6 border border-slate-800 space-y-4 text-slate-300">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="key" class="w-5 h-5 text-purple-400"></i>
+          AI Engine Settings
+        </h3>
+        <button id="close-settings-modal-btn" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="text-xs space-y-3 leading-relaxed">
+        <p class="text-slate-400">
+          The app works 100% offline using our built-in Smart Heuristic Engine. To enable real Google Gemini LLM reasoning, you can optionally provide your Gemini API key below:
+        </p>
+        <div class="space-y-1.5">
+          <label class="font-medium text-slate-200">Google Gemini API Key:</label>
+          <input 
+            type="password" 
+            id="settings-api-key-input" 
+            placeholder="AIzaSy..." 
+            class="w-full px-3 py-2 bg-navy-900 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500 font-mono"
+          >
+          <p class="text-[11px] text-slate-500">Stored only in your browser localStorage; never saved on the server.</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+        <button id="clear-api-key-btn" class="text-xs text-rose-400 hover:underline">Clear Stored Key</button>
+        <button id="save-settings-btn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-medium transition">
+          Save Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-navy-950/80 py-6 text-center text-xs text-slate-500 mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <i data-lucide="check-check" class="w-4 h-4 text-electric-400"></i>
+        <span>Built for College AI Hackathon • <strong>What Did I Miss?</strong></span>
+      </div>
+      <div class="text-[11px] text-slate-600">
+        Strict Truth-in-AI Guarantee • Ephemeral In-Memory Analysis
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="/static/app.js"></script>
+</body>
+</html>

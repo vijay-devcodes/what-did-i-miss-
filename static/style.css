@@ -1,0 +1,132 @@
+/* ==========================================================================
+   What Did I Miss? - Dark Navy & Electric Accent Stylesheet
+   ========================================================================== */
+
+:root {
+  --bg-primary: #070B14;
+  --bg-card: rgba(15, 23, 42, 0.75);
+  --bg-card-hover: rgba(30, 41, 59, 0.85);
+  --border-subtle: rgba(51, 65, 85, 0.5);
+  --border-glow: rgba(56, 189, 248, 0.35);
+  --electric-blue: #38BDF8;
+  --accent-purple: #A855F7;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Background mesh glow */
+.bg-mesh-gradient {
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+    radial-gradient(at 85% 25%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 85%, rgba(99, 102, 241, 0.10) 0px, transparent 50%);
+}
+
+/* Glassmorphic card styling */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.25s ease-in-out;
+}
+
+.glass-panel:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.glass-panel-glow {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.15);
+}
+
+/* Custom interactive buttons */
+.btn-gradient {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #38BDF8 100%);
+  background-size: 200% auto;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.4);
+}
+
+.btn-gradient:hover {
+  background-position: right center;
+  box-shadow: 0 6px 25px 0 rgba(56, 189, 248, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-gradient:active {
+  transform: translateY(0);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B1120;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Priority Badges */
+.badge-prio-high {
+  background: rgba(239, 68, 68, 0.15);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-prio-medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-prio-low {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Pulse animation for active badges */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.98); }
+}
+
+.animate-pulse-subtle {
+  animation: soft-pulse 3s infinite ease-in-out;
+}
+
+/* Toast Notification Animation */
+.toast-enter {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

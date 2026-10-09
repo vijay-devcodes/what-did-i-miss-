@@ -1,0 +1,20 @@
+{
+  "hackathon_crunch": {
+    "title": "⚡ 24h College Hackathon Crunch",
+    "description": "High-urgency team sprint with critical deadlines, task splits, mentor sync, and direct mentions.",
+    "default_user": "Alex",
+    "content": "[02:15 AM] Liam: @Alex the backend API routes are deployed to production, but response latency is hovering around 1.2s. We need to cache the demo results.\n[02:18 AM] Priya: Heads up team: I pushed the updated dark navy UI with electric blue accents! Looks super sleek.\n[02:22 AM] Alex: Awesome work Priya! I will test the mobile responsiveness right now.\n[02:30 AM] Sarah: IMPORTANT ANNOUNCEMENT from organizers: Devpost project submission closes strictly at 11:00 AM Sunday. No late submissions will be accepted!\n[02:35 AM] Liam: That means our internal code freeze must be by 8:30 AM Sunday so Sarah has enough time to record the 2-minute demo video.\n[02:40 AM] Alex: Agreed. Let's make that our final call: hard code freeze at 8:30 AM.\n[02:45 AM] Sarah: Decided: We are dropping user authentication and going with 1-click demo guest mode so judges can evaluate without signup friction.\n[03:10 AM] Priya: Action item for me: I will polish the priority badges and error banners before 6:00 AM.\n[03:15 AM] Liam: @Alex urgent blocker: can you review my PR #14 for the rate-limiting middleware? We don't want the demo crashing during the live pitch.\n[03:30 AM] Sarah: Meeting scheduled: Pitch rehearsal at 9:45 AM in Hackathon Lab Room 204. Everyone please be present.\n[03:45 AM] Priya: TBD: Are judges allowed to test with custom chat files or only the provided sample data? Organizer desk was unclear about this.\n[04:00 AM] Alex: I'll ask the track mentor at breakfast. Priya, get some sleep for 2 hours! Liam and I will monitor the endpoints."
+  },
+  "capstone_project": {
+    "title": "🎓 University Senior Capstone (HealthTrack)",
+    "description": "Academic project chat with professor updates, architecture decisions, and sprint review.",
+    "default_user": "Elena",
+    "content": "[09:15 AM] Prof_Vance: Reminder to all Capstone groups: Sprint 3 progress reports are due by Friday 5:00 PM on Canvas.\n[09:30 AM] David: Thanks Professor! Team, we still need to finish the database migration.\n[09:42 AM] Elena: I will finish the PostgreSQL foreign key constraints and write the migration script by Thursday noon.\n[10:00 AM] Marcus: @Elena please make sure the user profile table includes timezone support for appointment reminders.\n[10:15 AM] David: Final decision: We agreed to use JWT stored in HTTP-only cookies instead of LocalStorage for patient session security.\n[11:00 AM] Marcus: Sync meeting tomorrow at 2:00 PM on Google Meet (meet.google.com/xyz-capstone-sync) to do a dry run before Prof. Vance's lab review.\n[11:20 AM] Elena: Uncertainty: Still waiting on IRB approval for synthetic test patient records. David, do we have backup mock data ready?"
+  },
+  "campus_event": {
+    "title": "🎪 Campus TechFest Organizing Committee",
+    "description": "Student council coordination with sponsor approvals, venue booking, and printing deadlines.",
+    "default_user": "Pooja",
+    "content": "[14:00] Rohan: Big update everyone: Google Cloud has officially confirmed silver sponsorship with $1,500 in cloud credits!\n[14:10] Pooja: That's huge! I will draft the official sponsor banner and send it to the campus print shop by Wednesday 3:00 PM.\n[14:25] Karan: Urgent action item: Main auditorium A/V tech check is scheduled for Thursday at 4:30 PM in Hall A.\n[14:40] Rohan: @Pooja please collect the keynote speaker flight details ASAP so we can arrange student volunteer airport pickup.\n[15:00] Meera: Decided: T-shirt color for organizers is deep charcoal with neon green print.\n[15:15] Karan: Unresolved: Still unclear whether campus security will allow outside catering trucks past 10:00 PM."
+  }
+}
