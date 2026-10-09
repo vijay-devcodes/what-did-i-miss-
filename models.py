@@ -15,7 +15,7 @@ class AnalyzeRequest(BaseModel):
 
 
 class TaskItem(BaseModel):
-    task: str = Field(..., description="Description of the action item or task.")
+    task: str = Field("Action item", description="Description of the action item or task.")
     assignee: str = Field("Unassigned", description="Name of the person assigned, or 'Unassigned' if not mentioned.")
     deadline: str = Field("Not specified", description="Explicit deadline if given, else 'Not specified'.")
     priority: str = Field("Medium", description="Urgency: High, Medium, or Low.")
@@ -23,42 +23,42 @@ class TaskItem(BaseModel):
 
 
 class DeadlineItem(BaseModel):
-    title: str = Field(..., description="Milestone, event, or task associated with this deadline.")
-    due_date: str = Field(..., description="Explicit date and/or time.")
+    title: str = Field("Milestone", description="Milestone, event, or task associated with this deadline.")
+    due_date: str = Field("Specified in chat", description="Explicit date and/or time.")
     urgency: str = Field("Medium", description="Urgency rating: High, Medium, or Low.")
     related_to: str = Field("", description="Context or person responsible.")
 
 
 class AnnouncementItem(BaseModel):
-    title: str = Field(..., description="Concise headline of the announcement.")
-    details: str = Field(..., description="Important details, changes, or alerts.")
+    title: str = Field("Announcement", description="Concise headline of the announcement.")
+    details: str = Field("", description="Important details, changes, or alerts.")
     importance: str = Field("Medium", description="Importance level: High, Medium, or Low.")
     announced_by: str = Field("", description="Person who made the announcement, if stated.")
 
 
 class MeetingItem(BaseModel):
-    title: str = Field(..., description="Name or purpose of the meeting.")
-    date_time: str = Field(..., description="When the meeting occurs (e.g. 'Today at 5:00 PM').")
+    title: str = Field("Meeting", description="Name or purpose of the meeting.")
+    date_time: str = Field("Specified in chat", description="When the meeting occurs (e.g. 'Today at 5:00 PM').")
     venue_or_link: str = Field("TBD", description="Location, Google Meet/Zoom link, or room number.")
     agenda: str = Field("", description="Key topics to discuss.")
 
 
 class DecisionItem(BaseModel):
-    decision: str = Field(..., description="The concrete decision or agreement reached.")
+    decision: str = Field("Decision", description="The concrete decision or agreement reached.")
     context: str = Field("", description="Why this decision was made or alternative options considered.")
     agreed_by: str = Field("", description="Key participants involved in the agreement.")
 
 
 class MentionItem(BaseModel):
-    sender: str = Field(..., description="Person who mentioned the user.")
-    message: str = Field(..., description="The exact or summarized quote containing the mention.")
-    relevance: str = Field(..., description="Why this matters to the user.")
+    sender: str = Field("Team Member", description="Person who mentioned the user.")
+    message: str = Field("", description="The exact or summarized quote containing the mention.")
+    relevance: str = Field("Directly addressed to you in the discussion.", description="Why this matters to the user.")
     priority: str = Field("Medium", description="High, Medium, or Low.")
 
 
 class UncertaintyItem(BaseModel):
-    topic: str = Field(..., description="The subject or question that was left unresolved.")
-    missing_info: str = Field(..., description="What information is missing, pending, or unconfirmed.")
+    topic: str = Field("Unresolved Topic", description="The subject or question that was left unresolved.")
+    missing_info: str = Field("Pending confirmation.", description="What information is missing, pending, or unconfirmed.")
 
 
 class AnalysisStats(BaseModel):
